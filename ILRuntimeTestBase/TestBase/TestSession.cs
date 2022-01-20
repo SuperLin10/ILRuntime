@@ -9,6 +9,9 @@ using ILRuntimeTest.TestFramework;
 
 namespace ILRuntimeTest.TestBase
 {
+    /// <summary>
+    /// 测试会话 相当于一个独立的运行沙箱
+    /// </summary>
     public class TestSession 
     {
         ILRuntime.Runtime.Enviorment.AppDomain _app;
@@ -23,6 +26,11 @@ namespace ILRuntimeTest.TestBase
 
         public ILRuntime.Runtime.Enviorment.AppDomain Appdomain => _app;
 
+        /// <summary>
+        /// 加载
+        /// </summary>
+        /// <param name="assemblyPath"></param>
+        /// <param name="useRegister"></param>
         public void Load(string assemblyPath, bool useRegister)
         {
             fs = new FileStream(assemblyPath, FileMode.Open, FileAccess.Read);
@@ -53,12 +61,15 @@ namespace ILRuntimeTest.TestBase
 
                 ILRuntimeHelper.Init(_app);
                 ILRuntime.Runtime.Generated.CLRBindings.Initialize(_app);
+                // 调试环境中调用了下面这句代码，但是在Unity中是直接手动调用的，暂时还不懂是因为什么
                 _app.InitializeBindings(true);
                 LoadTest();
             }
             lastSession = this;
         }
-
+        /// <summary>
+        /// 加载测试用例
+        /// </summary>
         void LoadTest()
         {
             var types = _app.LoadedTypes.Values.ToList();

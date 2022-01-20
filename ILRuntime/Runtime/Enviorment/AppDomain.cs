@@ -46,6 +46,9 @@ namespace ILRuntime.Runtime.Enviorment
         Dictionary<int, ILIntepreter> intepreters = new Dictionary<int, ILIntepreter>();
         Dictionary<Type, CrossBindingAdaptor> crossAdaptors = new Dictionary<Type, CrossBindingAdaptor>(new ByReferenceKeyComparer<Type>());
         Dictionary<Type, ValueTypeBinder> valueTypeBinders = new Dictionary<Type, ValueTypeBinder>();
+        /// <summary>
+        /// 热更类型字典
+        /// </summary>
         ThreadSafeDictionary<string, IType> mapType = new ThreadSafeDictionary<string, IType>();
         Dictionary<Type, IType> clrTypeMapping = new Dictionary<Type, IType>(new ByReferenceKeyComparer<Type>());
         List<IType> typesByIndex = new List<IType>();
@@ -812,7 +815,7 @@ namespace ILRuntime.Runtime.Enviorment
         }
 
         /// <summary>
-        /// 更近类型名称返回类型
+        /// 根据类型名称返回类型
         /// </summary>
         /// <param name="fullname">类型全名 命名空间.类型名</param>
         /// <returns></returns>
@@ -941,7 +944,14 @@ namespace ILRuntime.Runtime.Enviorment
             }
             return null;
         }
-
+        /// <summary>
+        /// 解析类型全称的字符串，剔除泛型及数组并返回基础的类型名
+        /// </summary>
+        /// <param name="fullname"></param>
+        /// <param name="baseType">基础数据类型名称(去除泛型和数组)</param>
+        /// <param name="genericParams">泛型参数</param>
+        /// <param name="isArray">是否是数组</param>
+        /// <param name="rank"></param>
         internal static void ParseGenericType(string fullname, out string baseType, out List<string> genericParams, out bool isArray, out byte rank)
         {
             StringBuilder sb = new StringBuilder();
