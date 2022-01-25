@@ -50,15 +50,16 @@ namespace Mono.Cecil.Test
                 Console.WriteLine(type.FullName);
                 foreach (MethodDefinition method in type.Methods)
                 {
-                    Console.WriteLine($"\t{method.FullName}");
-                    if (method.Body == null || method.Body.Instructions == null)
+                    Console.WriteLine($"\t{method.Name}");
+                    Console.WriteLine("\t{");
+                    if (method.Body != null && method.Body.Instructions != null)
                     {
-                        continue;
+                        foreach (Instruction instruction in method.Body.Instructions)
+                        {
+                            Console.WriteLine($"\t\t{instruction.OpCode}");
+                        }
                     }
-                    foreach (Instruction instruction in method.Body.Instructions)
-                    {
-                        Console.WriteLine($"\t\t{instruction.OpCode}");
-                    }
+                    Console.WriteLine("\t}\n");
                 }
             }
         }
