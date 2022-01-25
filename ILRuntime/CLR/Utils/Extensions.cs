@@ -21,7 +21,7 @@ namespace ILRuntime.CLR.Utils
         {
             if (def.HasParameters)
             {
-                List<IType> param = new List<IType>();
+                List<IType> param = new List<IType>(def.Parameters.Count);
                 var dt = appdomain.GetType(def.DeclaringType, contextType, contextMethod);
                 foreach (var i in def.Parameters)
                 {

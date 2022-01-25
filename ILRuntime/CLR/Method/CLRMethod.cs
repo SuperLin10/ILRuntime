@@ -218,7 +218,7 @@ namespace ILRuntime.CLR.Method
 
         void InitParameters()
         {
-            parameters = new List<IType>();
+            parameters = new List<IType>(ParametersCLR.Length);
             foreach (var i in ParametersCLR)
             {
                 IType type = appdomain.GetType(i.ParameterType.FullName);

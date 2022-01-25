@@ -24,10 +24,14 @@ namespace ILRuntimeTestCLI
             int ignoreCnt = 0;
             int todoCnt = 0;
             List<TestResultInfo> failedTests = new List<TestResultInfo>();
-            foreach(var i in session.TestList)
+            int TotalConsume = 0;
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            foreach (var i in session.TestList)
             {                
                 i.Run(true);
                 var res = i.CheckResult();
+
                 if (res.Result == ILRuntimeTest.Test.TestResults.Failed)
                 {
                     if (res.HasTodo)
@@ -41,6 +45,8 @@ namespace ILRuntimeTestCLI
                 Console.WriteLine(res.Message);
                 Console.WriteLine("===============================");
             }
+            sw.Stop();
+
             Console.WriteLine("===============================");
             Console.WriteLine($"{failedTests.Count} tests failed");
             foreach(var i in failedTests)
@@ -49,8 +55,7 @@ namespace ILRuntimeTestCLI
                 Console.WriteLine("===============================");
             }
             Console.WriteLine($"Ran {session.TestList.Count} tests, {failedTests.Count} failded, {ignoreCnt} ignored, {todoCnt} todos");
-            
-
+            Console.WriteLine($"Total Consume: {sw.ElapsedMilliseconds}");
             
             session.Dispose();
             return failedTests.Count <= 0 ? 0 : -1;
@@ -64,7 +69,7 @@ namespace ILRuntimeTestCLI
             // 如果需要进行恢复操作可以将 Console.Out 进行缓存，并再次进行设置
             // Console.SetOut(Console.Out);
 
-            string logFileName = "out.txt";
+            string logFileName = $"out.{DateTime.Now.ToString("MM月dd日HH-mm-ss")}.txt";
             FileStream filestream = new FileStream(logFileName, FileMode.Create);
             var streamwriter = new StreamWriter(filestream);
             streamwriter.AutoFlush = true;

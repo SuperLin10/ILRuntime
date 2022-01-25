@@ -707,15 +707,18 @@ namespace ILRuntime.CLR.TypeSystem
                     return null;
             }
         }
-
+        /// <summary>
+        /// 初始化这个类型中的方法
+        /// </summary>
         void InitializeMethods ()
         {
-            methods = new Dictionary<string, List<ILMethod>> ();
-            constructors = new List<ILMethod> ();
+            methods = new Dictionary<string, List<ILMethod>> (definition.Methods.Count);
+            constructors = new List<ILMethod> (1);
             if ( definition == null )
                 return;
             if ( definition.HasCustomAttributes )
             {
+                // 检查这个类是否有 Jit特性（Attribute）
                 for ( int i = 0; i < definition.CustomAttributes.Count; i++ )
                 {
                     int f;
@@ -726,6 +729,7 @@ namespace ILRuntime.CLR.TypeSystem
                     }
                 }
             }
+            // 遍历所有的方法并将其转换为
             foreach ( var i in definition.Methods )
             {
                 if ( i.IsConstructor )

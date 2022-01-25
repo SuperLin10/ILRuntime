@@ -100,6 +100,12 @@ namespace ILRuntimeTest.Test
             Message.AppendLine("Elappsed Time:" + sw.ElapsedMilliseconds + "ms\n");
         }
 
+        /// <summary>
+        /// 执行对应类的对应方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="method"></param>
+        /// <param name="skipPerformance"></param>
         public void Invoke(string type, string method, bool skipPerformance)
         {
             Message = new StringBuilder();
@@ -110,6 +116,7 @@ namespace ILRuntimeTest.Test
                 var sw = new System.Diagnostics.Stopwatch();
                 Console.WriteLine("Invoking {0}.{1}", type, method);
                 sw.Start();
+                // App既热更加载的Appdomain， 这里固定获取对应类型中的没有参数的方法
                 var im = App.LoadedTypes[type].GetMethod(method, 0) as ILMethod;
                 var attributes = im.ReflectionMethodInfo.GetCustomAttributes(typeof(ILRuntimeTestAttribute), false);
                 if (attributes.Length > 0)

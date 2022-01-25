@@ -15,6 +15,9 @@ using ILRuntime.Other;
 
 namespace ILRuntime.Runtime.Intepreter
 {
+    /// <summary>
+    /// ILRuntime 的解译器
+    /// </summary>
     public unsafe partial class ILIntepreter
     {
         Enviorment.AppDomain domain;
@@ -82,7 +85,7 @@ namespace ILRuntime.Runtime.Intepreter
         {
             IList<object> mStack = stack.ManagedStack;
             int mStackBase = mStack.Count;
-            StackObject* esp = stack.StackBase;
+            StackObject* esp = stack.StackBase; // 栈中指向当前位置的指针
             stack.ResetValueTypePointer();
             if (method.HasThis)
             {
@@ -99,7 +102,9 @@ namespace ILRuntime.Runtime.Intepreter
                 esp = ExecuteR(method, esp, out unhandledException);
             else
                 esp = Execute(method, esp, out unhandledException);
-            object result = method.ReturnType != domain.VoidType ? method.ReturnType.TypeForCLR.CheckCLRTypes(StackObject.ToObject((esp - 1), domain, mStack)) : null;
+            object result = method.ReturnType != domain.VoidType
+                ? method.ReturnType.TypeForCLR.CheckCLRTypes(StackObject.ToObject((esp - 1), domain, mStack))
+                : null;
             //ClearStack
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
             ((List<object>)mStack).RemoveRange(mStackBase, mStack.Count - mStackBase);
@@ -5717,7 +5722,14 @@ namespace ILRuntime.Runtime.Intepreter
             else
                 throw new NotImplementedException();
         }
-
+        /// <summary>
+        /// 压入对象到栈中
+        /// </summary>
+        /// <param name="esp">与汇编中的esp寄存器类似，专门用来存储栈顶地址</param>
+        /// <param name="mStack"></param>
+        /// <param name="obj"></param>
+        /// <param name="isBox"></param>
+        /// <returns></returns>
         public static StackObject* PushObject(StackObject* esp, IList<object> mStack, object obj, bool isBox = false)
         {
             if (obj != null)

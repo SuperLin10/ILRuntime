@@ -225,6 +225,8 @@ namespace ILRuntime.Runtime.Enviorment
 
         /// <summary>
         /// Attention, this property isn't thread safe
+        /// 注意，这个属性不是线程安全
+        /// 所有加载的类型（已经被转为IType）
         /// </summary>
         public Dictionary<string, IType> LoadedTypes { get { return mapType.InnerDictionary; } }
 
@@ -1435,7 +1437,10 @@ namespace ILRuntime.Runtime.Enviorment
             }
             return null;
         }
-
+        /// <summary>
+        /// 请求IL解译器
+        /// </summary>
+        /// <returns></returns>
         internal ILIntepreter RequestILIntepreter()
         {
             ILIntepreter inteptreter = null;
@@ -1492,6 +1497,7 @@ namespace ILRuntime.Runtime.Enviorment
 
         /// <summary>
         /// Invokes a specific method
+        /// 在热更中执行一个方法
         /// </summary>
         /// <param name="m">Method</param>
         /// <param name="instance">object instance</param>
@@ -1500,12 +1506,12 @@ namespace ILRuntime.Runtime.Enviorment
         public object Invoke(IMethod m, object instance, params object[] p)
         {
             object res = null;
-            if (m is ILMethod)
+            if (m is ILMethod method)
             {
                 ILIntepreter inteptreter = RequestILIntepreter();
                 try
                 {
-                    res = inteptreter.Run((ILMethod)m, instance, p);
+                    res = inteptreter.Run(method, instance, p);
                 }
                 finally
                 {

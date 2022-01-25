@@ -859,7 +859,7 @@ namespace ILRuntime.CLR.Method
 
         void InitParameters()
         {
-            parameters = new List<IType>();
+            parameters = new List<IType>(def.Parameters.Count);
             foreach (var i in def.Parameters)
             {
                 IType type = null;
