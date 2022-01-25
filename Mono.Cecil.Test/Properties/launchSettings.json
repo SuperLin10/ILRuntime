@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Mono.Cecil.Test": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\GitLab\\goa-client\\Game\\buildTemp\\HotFixDLL\\HotFix.dll"
+    }
+  }
+}

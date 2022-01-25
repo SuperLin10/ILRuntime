@@ -6,9 +6,17 @@
 
 ![example workflow](https://github.com/Ourpalm/ILRuntime/actions/workflows/dotnet.yml/badge.svg)
 
-
-
 对ILRuntime项目添加自己理解的注释，整理、添加或删除一点内容
+
+
+
+新增目录说明：
+
+HelpDocument： 整理的文档方便查阅
+
+Mono.Cecil.Test： Mono.Cecil 项目的示例代码，学习如何使用Mono.Cecil
+
+
 
 
 
